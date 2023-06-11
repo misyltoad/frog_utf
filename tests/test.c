@@ -1,0 +1,29 @@
+#include "../frog_utf.h"
+
+#include <stdio.h>
+
+int main(void)
+{
+    frog_uchar32_t my_string_32[128];
+    frog_uchar16_t my_string_16[128];
+    frog_uchar8_t my_string_8_1[128];
+    frog_uchar8_t my_string_8_2[128];
+
+    const frog_uchar8_t test_string[] =
+    {
+        0x54,0x68,0x65,0xe2,0x9c,0xa8,0xe3,0x81,0x8b,0xe3,0x81,0x88,0xe3,0x82,
+        0x8b,0xe3,0x82,0xab,0xe3,0x82,0xa8,0xe3,0x83,0xab,0xe8,0x9b,0x99,0xf0,
+        0x9f,0x90,0xb8,0xf0,0x9f,0x90,0xb8,0xf0,0x9f,0x90,0xb8,0xf0,0x9f,0x90,
+        0xb8,0xf0,0x9f,0x90,0xb8,0xf0,0x9f,0x90,0xb8,0x00,
+    };
+
+    frog_str_gen_to_gen(my_string_8_1, sizeof(frog_uchar8_t), 128, test_string, sizeof(frog_uchar8_t), 128);
+ 
+    frog_str_utf8_to_utf16(my_string_16, 128, my_string_8_1, frog_strlen_utf8(my_string_8_1) + 1);
+    frog_str_utf16_to_utf32(my_string_32, 128, my_string_16, frog_strlen_utf16(my_string_16) + 1);
+    frog_str_utf32_to_utf8(my_string_8_2, 128, my_string_32, frog_strlen_utf32(my_string_32) + 1);
+
+    printf("%s\n", my_string_8_2);
+
+    return 0;
+}
